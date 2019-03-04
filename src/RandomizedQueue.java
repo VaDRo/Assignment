@@ -115,29 +115,27 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         private int currentIdx;
 
         public RandomizedListIterator() {
-            randomizeIndexes();
+            if (size > 0){
+                randomizeIndexes();
+            }
             currentIdx = 0;
         }
 
         private void randomizeIndexes() {
-            int[] idxs = new int[size];
+            //int[] idxs = new int[size];
             randomIndexes = new int[size];
             for (int i = 0; i < size; i++) {
-                idxs[i] = i;
+                randomIndexes[i] = i;
             }
 
             Random random = new Random();
-            StringBuilder indexes = new StringBuilder(";");
-            int count = 0;
-            while (true) {
-                int var = random.nextInt(idxs.length);
-                if (indexes.indexOf(Integer.toString(var)) < 0) {
-                    indexes.append(Integer.toString(var) + ";");
-                    randomIndexes[var] = idxs[count++];
-                }
-                if (count == size) {
-                    break;
-                }
+            for (int i = 0; i < size; i++) {
+                int j = random.nextInt(i + 1);
+                if (j >= size)
+                    j = size - 1;
+                int temp = randomIndexes[i];
+                randomIndexes[i] = randomIndexes[j];
+                randomIndexes[j] = temp;
             }
         }
 
@@ -163,4 +161,31 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
     }
 
+    public static void main(String[] args) {
+        int i;
+        RandomizedQueue<Integer> rq = new RandomizedQueue<Integer>();
+        rq.enqueue(1);
+        rq.enqueue(2);
+        rq.enqueue(3);
+        rq.enqueue(4);
+        rq.enqueue(5);
+        rq.enqueue(6);
+        rq.enqueue(7);
+        rq.enqueue(8);
+        rq.enqueue(9);
+        rq.enqueue(10);
+        rq.enqueue(11);
+        rq.enqueue(12);
+        rq.sample();
+
+        System.out.println("Show left items: ");
+        Iterator<Integer> iterrq = rq.iterator();
+        i = 0;
+        while (true) {
+            System.out.println(iterrq.next());
+            i++;
+            if (!iterrq.hasNext())
+                break;
+        }
+    }
 }
